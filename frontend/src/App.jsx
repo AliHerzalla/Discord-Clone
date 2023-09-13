@@ -3,15 +3,14 @@ import {
   SignedIn,
   SignedOut,
   RedirectToSignIn,
-  SignIn,
-  SignUp,
-  // useAuth,
 } from "@clerk/clerk-react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./routes/Home/Home";
 import NotFoundPage from "./routes/404/NotFoundPage";
 import UserProfilePage from "./routes/user-profile/user-profile";
 import { ThemeProvider } from "../@/components/ui/theme-provider";
+import SignInPage from "./routes/auth/signin/SignIn";
+import SignUpPage from "./routes/auth/signup/SignUp";
 
 if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
@@ -30,20 +29,16 @@ function PublicPage() {
 
 function ClerkProviderWithRoutes() {
   const navigate = useNavigate();
-  // const { isLoaded, userId, sessionId, getToken } = useAuth();
 
   return (
     <ClerkProvider publishableKey={clerkPubKey} navigate={(to) => navigate(to)}>
       <Routes>
         <Route path="/public" element={<PublicPage />} />
         <Route path="/*" element={<NotFoundPage />} />
-        <Route
-          path="/sign-in/*"
-          element={<SignIn routing="path" path="/sign-in" />}
-        />
+        <Route path="/sign-in/*" element={<SignInPage />} />
         <Route
           path="/sign-up/*"
-          element={<SignUp routing="path" path="/sign-up" />}
+          element={<SignUpPage />}
         />
         <Route
           path="/"
