@@ -10,7 +10,8 @@ import {
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./routes/Home/Home";
 import NotFoundPage from "./routes/404/NotFoundPage";
-import UserProfilePage from "./routes/user-profile/[[...index]]/user-profile";
+import UserProfilePage from "./routes/user-profile/user-profile";
+import { ThemeProvider } from "../@/components/ui/theme-provider";
 
 if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
@@ -77,9 +78,11 @@ function ClerkProviderWithRoutes() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <ClerkProviderWithRoutes />
-    </BrowserRouter>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <BrowserRouter>
+        <ClerkProviderWithRoutes />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

@@ -1,0 +1,1 @@
+Use the "dark:bg-[#313338]" as a background color in dark mode and set the light mode to "bg-white" if you want light mode
