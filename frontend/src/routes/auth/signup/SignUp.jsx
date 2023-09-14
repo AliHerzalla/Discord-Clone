@@ -1,6 +1,9 @@
 import { SignUp } from "@clerk/clerk-react";
 
-function SignUpPage() {
-  return <SignUp routing="path" path="/sign-up" />;
-}
+const SignUpPage = () => (
+  <div className={"flex h-[100vh] w-full justify-center items-center"}>
+    <SignUp routing="path" path="/sign-up" signInUrl={"/sign-in"} />
+  </div>
+);
+
 export default SignUpPage;

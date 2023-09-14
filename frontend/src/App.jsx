@@ -6,7 +6,7 @@ import {
 } from "@clerk/clerk-react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import Home from "./routes/Home/Home";
-import NotFoundPage from "./routes/404/NotFoundPage";
+import NotFoundPage from "./routes/errorPage/NotFoundPage";
 import UserProfilePage from "./routes/user-profile/user-profile";
 import { ThemeProvider } from "../@/components/ui/theme-provider";
 import SignInPage from "./routes/auth/signin/SignIn";
@@ -36,10 +36,7 @@ function ClerkProviderWithRoutes() {
         <Route path="/public" element={<PublicPage />} />
         <Route path="/*" element={<NotFoundPage />} />
         <Route path="/sign-in/*" element={<SignInPage />} />
-        <Route
-          path="/sign-up/*"
-          element={<SignUpPage />}
-        />
+        <Route path="/sign-up/*" element={<SignUpPage />} />
         <Route
           path="/"
           element={
