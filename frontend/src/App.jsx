@@ -5,12 +5,13 @@ import {
   RedirectToSignIn,
 } from "@clerk/clerk-react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
-import Home from "./routes/Home/Home";
 import NotFoundPage from "./routes/errorPage/NotFoundPage";
-import UserProfilePage from "./routes/user-profile/user-profile";
-import { ThemeProvider } from "../@/components/ui/theme-provider";
-import SignInPage from "./routes/auth/signin/SignIn";
-import SignUpPage from "./routes/auth/signup/SignUp";
+import { ThemeProvider } from "../@/components/providers/theme-provider";
+import SignInPage from "./routes/auth/SignIn/SignIn";
+import SignUpPage from "./routes/auth/SignUp/SignUp";
+import { useEffect } from "react";
+import { cn } from "../@/lib/utils";
+import InitialModal from "./routes/initial-modal/InitialModal";
 
 if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
@@ -42,7 +43,7 @@ function ClerkProviderWithRoutes() {
           element={
             <>
               <SignedIn>
-                <Home />
+                <InitialModal />
               </SignedIn>
               <SignedOut>
                 <RedirectToSignIn />
@@ -50,7 +51,7 @@ function ClerkProviderWithRoutes() {
             </>
           }
         />
-        <Route
+        {/* <Route
           path="/user-profile"
           element={
             <>
@@ -62,13 +63,19 @@ function ClerkProviderWithRoutes() {
               </SignedOut>
             </>
           }
-        />
+        /> */}
       </Routes>
     </ClerkProvider>
   );
 }
 
 function App() {
+  useEffect(() => {
+    // Add a class to the body element
+    // document.body.classList.add(cn("bg-white"));
+    // document.body.classList.add(cn("dark:bg-[#313338]"));
+    document.body.className = cn("bg-white dark:bg-[#313338]");
+  }, []);
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <BrowserRouter>

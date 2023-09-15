@@ -12,6 +12,14 @@ const ServerSchema = new mongoose.Schema({
     inviteCode: {
         type: String,
     },
+    createdAt: {
+        type: Date,
+        default: Date.now(),
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now(),
+    },
     profileId: {
         type: mongoose.Schema.Types.ObjectId,
     },
