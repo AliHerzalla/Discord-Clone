@@ -12,14 +12,6 @@ const ServerSchema = new Schema({
     inviteCode: {
         type: String,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now(),
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now(),
-    },
     profileId: {
         type: Schema.Types.ObjectId,
     },
@@ -41,4 +33,4 @@ const ServerSchema = new Schema({
 
 const ServerModel = model("Server", ServerSchema);
 
-export default { ServerModel };
+export default ServerModel;

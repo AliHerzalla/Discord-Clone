@@ -9,9 +9,8 @@ import NotFoundPage from "./routes/errorPage/NotFoundPage";
 import { ThemeProvider } from "../@/components/providers/theme-provider";
 import SignInPage from "./routes/auth/SignIn/SignIn";
 import SignUpPage from "./routes/auth/SignUp/SignUp";
-import { useEffect } from "react";
-import { cn } from "../@/lib/utils";
 import InitialModal from "./routes/initial-modal/InitialModal";
+import ProfilePage from "./routes/profilePage/ProfilePage";
 
 if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
@@ -19,27 +18,19 @@ if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
-function PublicPage() {
-  return (
-    <>
-      <h1>Public page</h1>
-      <a href="/">Go to protected page</a>
-    </>
-  );
-}
-
 function ClerkProviderWithRoutes() {
   const navigate = useNavigate();
-
   return (
     <ClerkProvider publishableKey={clerkPubKey} navigate={(to) => navigate(to)}>
       <Routes>
-        <Route path="/public" element={<PublicPage />} />
+        <Route path="/" element={<ProfilePage />} />
         <Route path="/*" element={<NotFoundPage />} />
         <Route path="/sign-in/*" element={<SignInPage />} />
         <Route path="/sign-up/*" element={<SignUpPage />} />
+        
+        {/* /test */}
         <Route
-          path="/"
+          path="/test"
           element={
             <>
               <SignedIn>
@@ -70,12 +61,6 @@ function ClerkProviderWithRoutes() {
 }
 
 function App() {
-  useEffect(() => {
-    // Add a class to the body element
-    // document.body.classList.add(cn("bg-white"));
-    // document.body.classList.add(cn("dark:bg-[#313338]"));
-    document.body.className = cn("bg-white dark:bg-[#313338]");
-  }, []);
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <BrowserRouter>

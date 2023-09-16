@@ -1,9 +1,7 @@
-"use client"
-
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
-
+import PropTypes from "prop-types";
 import { cn } from "@/lib/utils"
 
 const Dialog = DialogPrimitive.Root
@@ -95,3 +93,27 @@ export {
   DialogTitle,
   DialogDescription,
 }
+
+DialogPortal.propTypes = {
+  className: PropTypes.any,
+};
+
+DialogOverlay.propTypes = {
+  className: PropTypes.any,
+};
+
+DialogHeader.propTypes = {
+  className: PropTypes.any,
+};
+
+DialogFooter.propTypes = {
+  className: PropTypes.any,
+};
+
+DialogTitle.propTypes = {
+  className: PropTypes.any,
+};
+
+DialogDescription.propTypes = {
+  className: PropTypes.any,
+};

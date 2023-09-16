@@ -1,9 +1,11 @@
-"use client";
-
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
+import { FilePond, registerPlugin } from "react-filepond";
+import "filepond/dist/filepond.min.css";
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import {
   Dialog,
   DialogContent,
@@ -24,8 +26,9 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -37,12 +40,7 @@ const formSchema = z.object({
 });
 
 const InitialModal = () => {
-  // const [isMounted, setIsMounted] = useState(false);
-
-  // useEffect(() => {
-  //   setIsMounted(true)
-  // },[])
-
+  const [files, setFiles] = useState([]);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,7 +55,6 @@ const InitialModal = () => {
   const onSubmit = async (values) => {
     console.log(values);
   };
-  // if (!isMounted) return null;
 
   return (
     <Dialog open={true}>
@@ -72,18 +69,35 @@ const InitialModal = () => {
           </DialogDescription>{" "}
         </DialogHeader>{" "}
         <Form {...form}>
-          {/* {console.log(form)} */}
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {console.log(form)}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
             <div className="space-y-8 px-6">
               <div className="flex items-center justify-center text-center">
                 {/* TODO: image Upload */}
                 <FormField
                   control={form.control}
                   name="imageUrl"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormControl>
-                        <input type="file" name="" id="" />
+                        {/* <input type="file" name="" id="" /> */}
+                        <FilePond
+                          files={files}
+                          onupdatefiles={setFiles}
+                          allowMultiple={false}
+                          maxFiles={1}
+                          credits={false}
+                          server={{
+                            process: {
+                              url: `${import.meta.env.VITE_MAIN_BACKEND_URL}${
+                                import.meta.env.VITE_MAIN_BACKEND_PORT
+                              }/public/images`,
+                            },
+                          }}
+                          name="image"
+                          labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
+                          className={"w-[100%]"}
+                        />
                       </FormControl>
                     </FormItem>
                   )}

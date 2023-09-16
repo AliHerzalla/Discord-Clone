@@ -13,14 +13,6 @@ const ChannelSchema = new Schema({
     profileId: {
         type: Schema.Types.ObjectId
     },
-    createdAt: {
-        type: Date,
-        default: Date.now(),
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now(),
-    },
     profile: {
         type: [Schema.Types.ObjectId],
         ref: "UserProfile"
@@ -38,4 +30,4 @@ const ChannelSchema = new Schema({
 
 const ChannelModel = model("Channel", ChannelSchema);
 
-export default { ChannelModel };
+export default ChannelModel;

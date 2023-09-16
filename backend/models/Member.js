@@ -9,15 +9,6 @@ const MembersSchema = new Schema({
     profileId: {
         type: Schema.Types.ObjectId,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now(),
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now(),
-    },
-
     profile: {
         type: [Schema.Types.ObjectId],
         ref: "UserProfile",
@@ -33,6 +24,4 @@ const MembersSchema = new Schema({
 
 const MembersModel = model("Members", MembersSchema);
 
-export default {
-    MembersModel
-};
+export default MembersModel;

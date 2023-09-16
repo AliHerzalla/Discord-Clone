@@ -3,6 +3,7 @@ import { Schema, model } from "mongoose";
 const UserProfileSchema = new Schema({
     userId: {
         // gonna come from "Clerk" and every profile gonna have a unique id
+        // from a google account id
         type: String,
         unique: true,
     },
@@ -19,18 +20,10 @@ const UserProfileSchema = new Schema({
         required: true,
         unique: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now(),
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now(),
-    },
-    servers: [{
-        type: Schema.Types.ObjectId,
+    servers: {
+        type: [Schema.Types.ObjectId],
         ref: "Server",
-    }, ],
+    },
     members: {
         type: [Schema.Types.ObjectId],
         ref: "Members",
@@ -45,6 +38,4 @@ const UserProfileSchema = new Schema({
 
 const UserProfileModel = model("UserProfile", UserProfileSchema);
 
-export default {
-    UserProfileModel
-};
+export default UserProfileModel;
