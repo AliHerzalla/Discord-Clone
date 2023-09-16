@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const ChannelSchema = new mongoose.Schema({
+const ChannelSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -11,7 +11,7 @@ const ChannelSchema = new mongoose.Schema({
         default: "TEXT"
     },
     profileId: {
-        type: mongoose.Schema.Types.ObjectId
+        type: Schema.Types.ObjectId
     },
     createdAt: {
         type: Date,
@@ -22,20 +22,20 @@ const ChannelSchema = new mongoose.Schema({
         default: Date.now(),
     },
     profile: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [Schema.Types.ObjectId],
         ref: "UserProfile"
     },
     serverId: {
-        type: mongoose.Schema.Types.ObjectId
+        type: Schema.Types.ObjectId
     },
     servers: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [Schema.Types.ObjectId],
         ref: "Server"
     }
 }, {
     timestamps: true,
 });
 
-const ChannelModel = mongoose.model("Channel", ChannelSchema);
+const ChannelModel = model("Channel", ChannelSchema);
 
-module.exports = { ChannelModel };
+export default { ChannelModel };

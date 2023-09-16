@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const MembersSchema = new mongoose.Schema({
+const MembersSchema = new Schema({
     role: {
         type: String,
         enum: ["ADMIN", "MODERATOR", "GUEST"],
         default: "GUEST",
     },
     profileId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
     },
     createdAt: {
         type: Date,
@@ -19,20 +19,20 @@ const MembersSchema = new mongoose.Schema({
     },
 
     profile: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [Schema.Types.ObjectId],
         ref: "UserProfile",
     },
     serverId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
     },
     servers: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [Schema.Types.ObjectId],
         ref: "Server",
     },
 });
 
-const MembersModel = mongoose.model("Members", MembersSchema);
+const MembersModel = model("Members", MembersSchema);
 
-module.exports = {
+export default {
     MembersModel
 };

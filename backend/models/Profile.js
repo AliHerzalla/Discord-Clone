@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { Schema, model } from "mongoose";
 
-const UserProfileSchema = new mongoose.Schema({
+const UserProfileSchema = new Schema({
     userId: {
         // gonna come from "Clerk" and every profile gonna have a unique id
         type: String,
@@ -28,23 +28,23 @@ const UserProfileSchema = new mongoose.Schema({
         default: Date.now(),
     },
     servers: [{
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Server",
     }, ],
     members: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [Schema.Types.ObjectId],
         ref: "Members",
     },
     channels: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [Schema.Types.ObjectId],
         ref: "Channel",
     },
 }, {
     timestamps: true,
 });
 
-const UserProfileModel = mongoose.model("UserProfile", UserProfileSchema);
+const UserProfileModel = model("UserProfile", UserProfileSchema);
 
-module.exports = {
+export default {
     UserProfileModel
 };

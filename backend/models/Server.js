@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const ServerSchema = new mongoose.Schema({
+const ServerSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -21,24 +21,24 @@ const ServerSchema = new mongoose.Schema({
         default: Date.now(),
     },
     profileId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
     },
     profile: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [Schema.Types.ObjectId],
         ref: "UserProfile"
     },
     members: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [Schema.Types.ObjectId],
         ref: "Members"
     },
     channels: {
-        type: [mongoose.Schema.Types.ObjectId],
+        type: [Schema.Types.ObjectId],
         ref: "Channel"
     }
 }, {
     timestamps: true,
 });
 
-const ServerModel = mongoose.model("Server", ServerSchema);
+const ServerModel = model("Server", ServerSchema);
 
-module.exports = { ServerModel };
+export default { ServerModel };
