@@ -91,6 +91,7 @@ const ProfilePage = () => {
   if (userProfile) {
     findProfileServers(userProfile);
     if (userServers.length > 0) {
+      console.log(userServers);
       return navigate(`/servers/${userServers.id}`);
     } else {
       return <InitialModal />;
