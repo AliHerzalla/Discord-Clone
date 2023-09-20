@@ -2,32 +2,35 @@ import "dotenv/config";
 import * as fs from "fs";
 import express from "express";
 import cors from "cors";
-import multer from "multer";
+// import multer from "multer";
 import bodyParser from "body-parser";
 import connectDB from "./config/database.js";
-import UserProfileModel from "./models/Profile.js";
-import { v4 as uuid } from "uuid";
-import ServerModel from "./models/Server.js";
+// import UserProfileModel from "./models/Profile.js";
+// import { v4 as uuid } from "uuid";
+// import ServerModel from "./models/Server.js";
+import path from "path";
 
 /* -------------------------------------------------------------------------- */
 /*                                   Routes                                   */
 /* -------------------------------------------------------------------------- */
 import profileRoutes from "./routes/ProfileRoutes.js";
-import serverRoutes from "./routes/serverRoutes.js";
+import serverRoutes from "./routes/ServerRoutes.js";
 
 /* -------------------------------------------------------------------*/
 
 const app = express();
 
 app.use(cors());
+app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
-    extended: true,
+    extended: false,
   })
 );
-app.use(bodyParser.json());
+app.use("/uploads", express.static("uploads"));
 
-const upload = multer();
+
+// const upload = multer();
 
 const PORT = 3000 || process.env.PORT;
 
