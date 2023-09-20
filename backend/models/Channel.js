@@ -1,29 +1,32 @@
-import { Schema, model } from 'mongoose';
+import {
+    Schema,
+    model
+} from "mongoose";
 
 const ChannelSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     channelType: {
         type: String,
         enum: ["TEXT", "AUDIO", "VIDEO"],
-        default: "TEXT"
+        default: "TEXT",
     },
     profileId: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+    },
+    serverId: {
+        type: Schema.Types.ObjectId,
     },
     profile: {
         type: [Schema.Types.ObjectId],
-        ref: "UserProfile"
-    },
-    serverId: {
-        type: Schema.Types.ObjectId
+        ref: "UserProfile",
     },
     servers: {
         type: [Schema.Types.ObjectId],
-        ref: "Server"
-    }
+        ref: "Server",
+    },
 }, {
     timestamps: true,
 });

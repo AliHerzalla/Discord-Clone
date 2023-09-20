@@ -1,4 +1,7 @@
-import { Schema, model } from "mongoose";
+import {
+    Schema,
+    model
+} from "mongoose";
 
 const MembersSchema = new Schema({
     role: {
@@ -9,12 +12,12 @@ const MembersSchema = new Schema({
     profileId: {
         type: Schema.Types.ObjectId,
     },
+    serverId: {
+        type: Schema.Types.ObjectId,
+    },
     profile: {
         type: [Schema.Types.ObjectId],
         ref: "UserProfile",
-    },
-    serverId: {
-        type: Schema.Types.ObjectId,
     },
     servers: {
         type: [Schema.Types.ObjectId],

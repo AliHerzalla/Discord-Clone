@@ -47,7 +47,7 @@ const ProfilePage = () => {
     if (!userProfile) return;
     try {
       const { _id } = userProfile;
-      console.log("_ID" , _id)
+      console.log("_ID", _id);
       const response = await fetch(
         `${BASE_BACKEND_URL}/get-profile-servers/${_id}`,
         {
@@ -63,40 +63,32 @@ const ProfilePage = () => {
     }
   };
 
-  useEffect(() => {
-    if (!user) {
-      return;
-    }
-    const findUniqueProfile = async () => {
-      try {
-        const response = await fetch(
-          `${BASE_BACKEND_URL}/get-unique-profile/${user.id}`,
-          {
-            method: "GET",
-          }
-        );
-
-        if (!response.ok) throw new Error("Error fetching unique profile");
-
-        const result = await response.json();
-
+  const findUniqueProfile = useCallback(
+    async (profileId) => {
+      const response = await fetch(
+        `${import.meta.env.VITE_MAIN_BACKEND_URL}${
+          import.meta.env.VITE_MAIN_BACKEND_PORT
+        }/get-unique-profile/${profileId}`,
+        {
+          method: "GET",
+        }
+      );
+      response.json().then((result) => {
         if (result.data == null) {
           createNewUniqueProfile(user);
         } else {
           setUserProfile(result.data);
         }
-      } catch (error) {
-        console.error("Error fetching unique profile:", error);
-      }
-    };
-    findUniqueProfile();
-  }, [user]);
+      });
+    },
+    [user]
+  );
 
   // To find the profile user in the database if there is an existing profile we well return the user, if there is no existing profile for this user we well create a new profile
 
-  // useEffect(() => {
-  //   findUniqueProfile(user?.id);
-  // }, [user?.id, findUniqueProfile]);
+  useEffect(() => {
+    findUniqueProfile(user?.id);
+  }, [user?.id, findUniqueProfile]);
 
   useEffect(() => {
     findProfileServers(userProfile);
