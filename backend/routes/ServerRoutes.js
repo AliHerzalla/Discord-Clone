@@ -3,10 +3,7 @@ import multer from "multer";
 import { v4 as uuid } from "uuid";
 import path from "path";
 
-import {
-  getProfileServers,
-  CreateServer,
-} from "../controllers/ServerController.js";
+import { CreateServer } from "../controllers/ServerController.js";
 const router = Router();
 
 const storage = multer.diskStorage({
@@ -29,9 +26,9 @@ const upload = multer({
   limits: { fieldSize: 25 * 1024 * 1024 },
   storage,
   fileFilter,
+  // preservePath:true,
 });
 
-router.route("/get-profile-servers/:id").get(getProfileServers);
 router.route("/create-server").post(upload.single("Image"), CreateServer);
 
 export default router;

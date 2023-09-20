@@ -47,6 +47,7 @@ const ProfilePage = () => {
     if (!userProfile) return;
     try {
       const { _id } = userProfile;
+      console.log("_ID" , _id)
       const response = await fetch(
         `${BASE_BACKEND_URL}/get-profile-servers/${_id}`,
         {

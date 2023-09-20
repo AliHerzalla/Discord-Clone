@@ -11,14 +11,15 @@ const ServerSchema = new Schema({
     },
     inviteCode: {
         type: String,
+        unique: true
     },
     profileId: {
         type: Schema.Types.ObjectId,
     },
-    profile: {
-        type: [Schema.Types.ObjectId],
+    profile: [{
+        type: Schema.Types.ObjectId,
         ref: "UserProfile"
-    },
+    }],
     members: {
         type: [Schema.Types.ObjectId],
         ref: "Members"

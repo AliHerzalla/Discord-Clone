@@ -73,3 +73,30 @@ export const CreateUniqueProfile = async (req, res) => {
   //   res.status(400).json({ message: "Something went wrong!", data: null });
   // }
 };
+
+/**
+ * Get
+ * Find Profile Servers by ID
+ * ||
+ * \/
+ */
+export const getProfileServers = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    console.log(id);
+
+    UserProfileModel.findById(id)
+      .populate("servers")
+      .then((profile) => {
+        console.log("profile  get => ", profile);
+        res.status(200).json({ profileData: profile });
+      });
+    // res.status(200).json({
+    //   message: "Profile was successfully retrieved " + id,
+    // });
+  } catch (error) {}
+
+  // const { id } = req.params;
+  // console.log(id);
+};

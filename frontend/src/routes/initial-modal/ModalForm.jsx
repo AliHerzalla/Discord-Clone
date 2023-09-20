@@ -37,17 +37,6 @@ const rejectStyle = {
 
 /* ---------------------------- DropZone styling ---------------------------- */
 
-
-
-
-
-
-
-
-
-
-
-
 export function ModalForm({ userId, children }) {
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(""); // state for storing previewImage
@@ -102,7 +91,10 @@ export function ModalForm({ userId, children }) {
         setErrorMsg("Please enter all the field values.");
       }
     } catch (error) {
+      console.error(error.message);
       error.response && setErrorMsg(error.response.data);
+      // error.response &&
+      //   setErrorMsg("only upload files with jpg, jpeg, png format.");
     }
   };
 
@@ -115,7 +107,7 @@ export function ModalForm({ userId, children }) {
       setPreviewSrc(fileReader.result);
     };
     fileReader.readAsDataURL(uploadedFile);
-    setIsPreviewAvailable(uploadedFile.name.match(/\.(jpeg|jpg|png)$/));
+    setIsPreviewAvailable(uploadedFile.name.match(/\.(jpeg|jpg|png|gif)$/));
   };
 
   // const updateBorder = (dragState) => {
@@ -175,14 +167,14 @@ export function ModalForm({ userId, children }) {
           </Dropzone>
           {previewSrc ? (
             isPreviewAvailable ? (
-              <div className="max-h-full relative">
+              <div className="h-48 w-48 relative m-auto ">
                 <img
-                  className="object-contain h-72 w-full m-auto"
+                  className="object-fil rounded-full h-full w-full "
                   src={previewSrc}
                   alt="Preview"
                 />
                 <button
-                  className="absolute top-7 right-5 bg-red-500 text-white rounded-full h-6 w-6 flex justify-center items-center hover:bg-red-600"
+                  className="absolute top-3 right-4 bg-rose-500 text-white rounded-full h-4 w-4 p-4 flex justify-center items-center shadow-xl hover:bg-rose-600 "
                   onClick={() => {
                     setPreviewSrc("");
                     setFile(null);
