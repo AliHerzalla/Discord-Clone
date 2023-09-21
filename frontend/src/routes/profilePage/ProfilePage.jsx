@@ -43,13 +43,13 @@ const ProfilePage = () => {
     }
   };
 
-  const findProfileServers = async (userProfile) => {
+  const findProfile = async (userProfile) => {
     if (!userProfile) return;
     try {
       const { _id } = userProfile;
       console.log("_ID", _id);
       const response = await fetch(
-        `${BASE_BACKEND_URL}/get-profile-servers/${_id}`,
+        `${BASE_BACKEND_URL}/get-profile/${_id}`,
         {
           method: "GET",
         }
@@ -91,7 +91,7 @@ const ProfilePage = () => {
   }, [user?.id, findUniqueProfile]);
 
   useEffect(() => {
-    findProfileServers(userProfile);
+    findProfile(userProfile);
   }, [userProfile]);
 
   if (!user) {
@@ -99,7 +99,7 @@ const ProfilePage = () => {
   }
 
   if (userProfile) {
-    // findProfileServers(userProfile);
+    // findProfile(userProfile);
     if (userServers.length > 0) {
       return navigate(`/servers/${userServers.id}`);
     } else {
