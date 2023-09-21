@@ -16,11 +16,11 @@ const MembersSchema = new Schema({
         type: Schema.Types.ObjectId,
     },
     profile: {
-        type: [Schema.Types.ObjectId],
+        type: Schema.Types.ObjectId,
         ref: "UserProfile",
     },
-    servers: {
-        type: [Schema.Types.ObjectId],
+    server: {
+        type: Schema.Types.ObjectId,
         ref: "Server",
     },
 });

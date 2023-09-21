@@ -68,14 +68,27 @@ export const CreateUniqueProfile = async (req, res) => {
  * ||
  * \/
  */
-export const getProfileServers = async (req, res) => {
+export const getProfile = async (req, res) => {
   try {
     const { id } = req.params;
 
     console.log(id);
 
     UserProfileModel.findById(id)
-      .populate("servers")
+      .populate([
+        {
+          path: "servers",
+          perDocumentLimit: 2,
+        },
+        {
+          path: "channels",
+          perDocumentLimit: 2,
+        },
+        {
+          path: "members",
+          perDocumentLimit: 2,
+        },
+      ])
       .then((profile) => {
         console.log("profile  get => ", profile);
         res.status(200).json({

@@ -1,36 +1,36 @@
 import {
     Schema,
     model
-} from 'mongoose';
+} from "mongoose";
 
 const ServerSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     imageUrl: {
         type: String,
-        required: false
+        required: false,
     },
     inviteCode: {
         type: String,
-        unique: true
+        unique: true,
     },
     profileId: {
         type: Schema.Types.ObjectId,
     },
     profile: {
-        type: [Schema.Types.ObjectId],
-        ref: "UserProfile"
+        type: Schema.Types.ObjectId,
+        ref: "UserProfile",
     },
     members: {
         type: [Schema.Types.ObjectId],
-        ref: "Members"
+        ref: "Members",
     },
     channels: {
         type: [Schema.Types.ObjectId],
-        ref: "Channel"
-    }
+        ref: "Channel",
+    },
 }, {
     timestamps: true,
 });
