@@ -1,7 +1,8 @@
 import { useUser } from "@clerk/clerk-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InitialModal from "../initial-modal/InitialModal";
+import { globalContext } from "../../../src/contextAPI/GlobalProvider";
 
 const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
   import.meta.env.VITE_MAIN_BACKEND_PORT
@@ -10,6 +11,8 @@ const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
 const ProfilePage = () => {
   const { user, isLoaded } = useUser();
   const [userProfile, setUserProfile] = useState(null);
+  const { isDialogOpen } = useContext(globalContext);
+  console.log(isDialogOpen);
 
   const navigate = useNavigate();
 

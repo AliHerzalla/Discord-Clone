@@ -1,9 +1,15 @@
 import PropTypes from "prop-types";
 import NavigationSideBar from "../../../@/components/navigation/navigation-sidebar";
+import CreateNewServerModal from "../../../src/routes/initial-modal/CreateNewServerModal";
+import { globalContext } from "../../../src/contextAPI/GlobalProvider";
+import { useContext } from "react";
 
 const MainLayout = ({ children }) => {
+  const { isDialogOpen } = useContext(globalContext);
+  console.log(isDialogOpen);
   return (
     <div className={"h-screen dark:bg-[#313338]"}>
+      {isDialogOpen ? <CreateNewServerModal /> : ""}
       <div
         className={
           "hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0"
