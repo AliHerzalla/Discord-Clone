@@ -9,7 +9,6 @@ import UserProfileModel from "../models/Profile.js";
 export const getUniqueProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("backend ", id);
     const profileDoc = await UserProfileModel.findOne({
       userId: id,
     });
@@ -37,7 +36,6 @@ export const getUniqueProfile = async (req, res) => {
 export const CreateUniqueProfile = async (req, res) => {
   try {
     const { userId, username, imageUrl, email } = req.body;
-    console.log(userId);
     const newProfileDoc = await UserProfileModel.create({
       userId: userId,
       username: username,
@@ -72,8 +70,6 @@ export const getProfile = async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log(id);
-
     UserProfileModel.findById(id)
       .populate([
         {
@@ -90,7 +86,6 @@ export const getProfile = async (req, res) => {
         },
       ])
       .then((profile) => {
-        console.log("profile  get => ", profile);
         res.status(200).json({
           profileData: profile,
         });

@@ -1,4 +1,4 @@
-import { useUser, RedirectToSignIn } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InitialModal from "../initial-modal/InitialModal";
@@ -8,9 +8,8 @@ const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
 }`;
 
 const ProfilePage = () => {
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const [userProfile, setUserProfile] = useState(null);
-  const [userServers, setUserServers] = useState([]);
 
   const navigate = useNavigate();
 
@@ -43,25 +42,29 @@ const ProfilePage = () => {
     }
   };
 
-  const findProfile = async (userProfile) => {
-    if (!userProfile) return;
-    try {
-      const { _id } = userProfile;
-      console.log("_ID", _id);
-      const response = await fetch(
-        `${BASE_BACKEND_URL}/get-profile/${_id}`,
-        {
+  const findProfile = useCallback(
+    async (userProfile) => {
+      if (!userProfile) return;
+      try {
+        const { _id } = userProfile;
+        const response = await fetch(`${BASE_BACKEND_URL}/get-profile/${_id}`, {
           method: "GET",
+        });
+        if (!response.ok)
+          throw new Error("Couldn't find the server with the specified id.");
+        const servers = await response.json();
+        if (!servers?.profileData) {
+          return <InitialModal />;
+        } else {
+          navigate(`/servers/${servers?.profileData?.servers[0]?._id}`);
         }
-      );
-      if (!response.ok)
-        throw new Error("Couldn't find the server with the specified id.");
-      const servers = await response.json();
-      setUserServers(servers);
-    } catch (error) {
-      console.error("Error fetching profile servers:", error);
-    }
-  };
+        // setUserServers(servers?.profileData?.servers);
+      } catch (error) {
+        console.error("Error fetching profile servers:", error);
+      }
+    },
+    [navigate]
+  );
 
   const findUniqueProfile = useCallback(
     async (profileId) => {
@@ -87,44 +90,20 @@ const ProfilePage = () => {
   // To find the profile user in the database if there is an existing profile we well return the user, if there is no existing profile for this user we well create a new profile
 
   useEffect(() => {
-    findUniqueProfile(user?.id);
-  }, [user?.id, findUniqueProfile]);
+    if (user?.id) {
+      findUniqueProfile(user?.id);
+    }
+  }, [user?.id, findUniqueProfile, user]);
 
   useEffect(() => {
     findProfile(userProfile);
-  }, [userProfile]);
+  }, [userProfile, findProfile]);
 
-  if (!user) {
-    return RedirectToSignIn();
-  }
-
-  if (userProfile) {
-    // findProfile(userProfile);
-    if (userServers.length > 0) {
-      return navigate(`/servers/${userServers.id}`);
-    } else {
-      return <InitialModal />;
+  if (isLoaded) {
+    if (!user) {
+      return navigate("/sign-in");
     }
   }
 };
 
 export default ProfilePage;
-
-//  const findUniqueProfile = useCallback(
-//    async (profileId) => {
-//      const response = await fetch(
-//        `${BASE_BACKEND_URL}/get-unique-profile/${profileId}`,
-//        {
-//          method: "GET",
-//        }
-//      );
-//      response.json().then((result) => {
-//        if (result.data == null) {
-//          createNewUniqueProfile(user);
-//        } else {
-//          setUserProfile(result.data);
-//        }
-//      });
-//    },
-//    [user]
-//  );

@@ -1,10 +1,9 @@
 import UserProfileModel from "../models/Profile.js";
-import ServerModel from "../models/Server.js";
 import MemberModel from "../models/Member.js";
 import ChannelModel from "../models/Channel.js";
+import ServerModel from "../models/Server.js";
 
 import { v4 as uuid } from "uuid";
-import fs from "fs";
 
 /**
  * Post
@@ -12,7 +11,7 @@ import fs from "fs";
  * ||
  * \/
  */
-export const CreateServer = async (req, res) => {
+export const createServer = async (req, res) => {
   try {
     console.log("req.body => ", req.body);
     console.log(req.file);
@@ -26,7 +25,6 @@ export const CreateServer = async (req, res) => {
       return res.status(404).json({
         message: `User ${userId} does not exist`,
       });
-    console.log("profileDoc => ", profileDoc);
 
     // Create a default "general" channel for the server
     const generalChannel = new ChannelModel({
@@ -73,4 +71,21 @@ export const CreateServer = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+/**
+ * Get 
+ * Find server by user id
+ * ||
+ * \/
+ */
+export const findServerByUserId = async (req, res) => {
+  const { id } = req.params;
+
+  const ServersDoc = await UserProfileModel.find({ userId: id }).populate("servers");
+
+  if (!ServersDoc) {
+    res.status(400).json({ message: "Servers not found", data: null });
+  }
+  res.status(200).json({ message: "Servers found", data: ServersDoc });
 };

@@ -3,7 +3,7 @@ import multer from "multer";
 import { v4 as uuid } from "uuid";
 import path from "path";
 
-import { CreateServer } from "../controllers/ServerController.js";
+import { createServer, findServerByUserId } from "../controllers/ServerController.js";
 const router = Router();
 
 const storage = multer.diskStorage({
@@ -29,6 +29,6 @@ const upload = multer({
   // preservePath:true,
 });
 
-router.route("/create-server").post(upload.single("Image"), CreateServer);
-
+router.route("/create-server").post(upload.single("Image"), createServer);
+router.route("/find-server-by-userId/:id").get(findServerByUserId);
 export default router;

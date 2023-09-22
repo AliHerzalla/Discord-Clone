@@ -6,11 +6,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../../../@/components/ui/dialog";
-;
+import { TailSpin } from "react-loader-spinner";
 
 import { Button } from "../../../@/components/ui/button";
 import { useUser } from "@clerk/clerk-react";
 import { ModalForm } from "./ModalForm";
+import { useContext } from "react";
+import { globalContext } from "../../contextAPI/globalProvider";
 
 export const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
   import.meta.env.VITE_MAIN_BACKEND_PORT
@@ -18,7 +20,7 @@ export const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
 
 const InitialModal = () => {
   const { user } = useUser();
-  const { id } = user;
+  const { loadingButtonState } = useContext(globalContext);
 
   return (
     <Dialog open={true}>
@@ -32,10 +34,23 @@ const InitialModal = () => {
             always change it later.
           </DialogDescription>
         </DialogHeader>
-        <ModalForm userId={id}>
+        <ModalForm userId={user?.id}>
           <DialogFooter className="bg-gray-100 px-6 py-4">
             <Button variant="primary" className="w-fit">
-              Create
+              {loadingButtonState ? (
+                <TailSpin
+                  height="32"
+                  width="32"
+                  color="white"
+                  ariaLabel="tail-spin-loading"
+                  radius="1"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                />
+              ) : (
+                "Create"
+              )}
             </Button>
           </DialogFooter>
         </ModalForm>
@@ -45,71 +60,3 @@ const InitialModal = () => {
 };
 
 export default InitialModal;
-
-/*
-
-return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8"
-        encType="multipart/form-data"
-      >
-        <div className="space-y-8 px-6">
-          <div className="flex items-center justify-center text-center">
-            <FormField
-              control={form.control}
-              name="imageUrl"
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        required={true}
-                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible: ring-offset-0"
-                        // placeholder="Enter server name "
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="text-left" />
-                  </FormItem>
-                );
-              }}
-            />
-          </div>
-          <FormField
-            control={form.control}
-            name="serverName"
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
-                    Server name
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      required={true}
-                      className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible: ring-offset-0"
-                      ref={inputRef}
-                      placeholder="Enter server name "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-        </div>
-
-        <DialogFooter className="bg-gray-100 px-6 py-4">
-          <Button variant="primary" className="w-fit">
-            Create
-          </Button>
-        </DialogFooter>
-      </form>
-    </Form>
-  );
-
-*/

@@ -1,9 +1,11 @@
 import Dropzone from "react-dropzone";
 import axios from "axios";
 import { Form } from "../../../@/components/ui/form";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { BASE_BACKEND_URL } from "./InitialModal";
-
+import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
+import { globalContext } from "../../contextAPI/globalProvider";
 /* -------------------------------------------------------------------------- */
 /*                              DropZone styling                              */
 /* -------------------------------------------------------------------------- */
@@ -40,6 +42,7 @@ const rejectStyle = {
 export function ModalForm({ userId, children }) {
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(""); // state for storing previewImage
+  const { setLoadingButtonState } = useContext(globalContext);
   const [newServer, setNewServer] = useState({
     serverName: "",
     userId: userId,
@@ -48,6 +51,7 @@ export function ModalForm({ userId, children }) {
   const [responseMessage, setResponseMessage] = useState("");
   const [isPreviewAvailable, setIsPreviewAvailable] = useState(false); // state to show preview only for images
   const dropRef = useRef(); // React ref for managing the hover state of droppable area
+  const navigate = useNavigate();
 
   const handleInputChange = (event) => {
     setNewServer({
@@ -79,11 +83,14 @@ export function ModalForm({ userId, children }) {
               },
             }
           );
-          console.log(response);
           if (response.status !== 200)
             throw new Error("Couldn't create server");
           setResponseMessage(response.data.message);
-          setTimeout(() => setResponseMessage(""), 3000);
+          setLoadingButtonState(true);
+          setTimeout(() => {
+            setResponseMessage("");
+            return navigate(`/servers/${response?.data?.server?._id}`);
+          }, 3000);
         } else {
           setErrorMsg("Please select a file to add.");
         }
@@ -110,15 +117,6 @@ export function ModalForm({ userId, children }) {
     setIsPreviewAvailable(uploadedFile.name.match(/\.(jpeg|jpg|png|gif)$/));
   };
 
-  // const updateBorder = (dragState) => {
-  //   if (dragState === "over") {
-  //     dropRef.current.style.border = "2px solid #000";
-  //   } else if (dragState === "leave") {
-  //     dropRef.current.style.border = "2px dashed #e9ebeb";
-  //   }
-  // };
-  // dropRef.current.style.border = "2px dashed #e9ebeb";
-
   return (
     <Form>
       <form
@@ -128,13 +126,7 @@ export function ModalForm({ userId, children }) {
       >
         <div className="space-y-8 px-6">
           {/* upload Section */}
-
-          <Dropzone
-            onDrop={onDrop}
-
-            // onDragEnter={() => updateBorder("over")}
-            // onDragLeave={() => updateBorder("leave")}
-          >
+          <Dropzone onDrop={onDrop}>
             {({
               getRootProps,
               getInputProps,
@@ -153,7 +145,6 @@ export function ModalForm({ userId, children }) {
                   },
                 })}
                 ref={dropRef}
-                // className="border-dashed border-2 border-[#e9ebeb] p-4 cursor-pointer"
               >
                 <input {...getInputProps()} />
                 <p>Drag and drop a file OR click here to select a file</p>
@@ -231,3 +222,8 @@ export function ModalForm({ userId, children }) {
     </Form>
   );
 }
+
+ModalForm.propTypes = {
+  userId: PropTypes.any,
+  children: PropTypes.any,
+};
