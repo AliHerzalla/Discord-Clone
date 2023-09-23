@@ -3,10 +3,10 @@ import App from "./App.jsx";
 import "./index.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
-import GlobalProvider from "./contextAPI/globalProvider.jsx";
+import { MainContextProvider } from "../src/contextAPI/MainContextProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <GlobalProvider>
+  <MainContextProvider>
     <App />
-  </GlobalProvider>
+  </MainContextProvider>
 );

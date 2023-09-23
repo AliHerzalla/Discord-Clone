@@ -12,7 +12,7 @@ import { Button } from "../../../@/components/ui/button";
 import { useUser } from "@clerk/clerk-react";
 import { ModalForm } from "./ModalForm";
 import { useContext } from "react";
-import { globalContext } from "../../contextAPI/globalProvider";
+import { MainProvider } from "../../contextAPI/MainContextProvider";
 
 export const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
   import.meta.env.VITE_MAIN_BACKEND_PORT
@@ -20,7 +20,7 @@ export const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
 
 const InitialModal = () => {
   const { user } = useUser();
-  const { loadingButtonState } = useContext(globalContext);
+  const { loadingButtonState } = useContext(MainProvider);
 
   return (
     <Dialog open={true}>

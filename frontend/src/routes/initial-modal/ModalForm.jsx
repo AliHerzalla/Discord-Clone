@@ -5,7 +5,7 @@ import { useState, useRef, useContext } from "react";
 import { BASE_BACKEND_URL } from "./InitialModal";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-import { globalContext } from "../../contextAPI/globalProvider";
+import { MainProvider } from "../../contextAPI/MainContextProvider";
 /* -------------------------------------------------------------------------- */
 /*                              DropZone styling                              */
 /* -------------------------------------------------------------------------- */
@@ -42,7 +42,9 @@ const rejectStyle = {
 export function ModalForm({ userId, children }) {
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(""); // state for storing previewImage
-  const { setLoadingButtonState } = useContext(globalContext);
+  const { loadingButtonState, setLoadingButtonState } =
+    useContext(MainProvider);
+  console.log("setLoadingButtonState", loadingButtonState);
   const [newServer, setNewServer] = useState({
     serverName: "",
     userId: userId,

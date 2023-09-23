@@ -4,7 +4,7 @@ import { Form } from "../../../@/components/ui/form";
 import { useState, useRef, useContext } from "react";
 import { BASE_BACKEND_URL } from "./InitialModal";
 import { useNavigate } from "react-router-dom";
-import { globalContext } from "../../contextAPI/globalProvider";
+import { MainProvider } from "../../contextAPI/MainContextProvider";
 import {
   Dialog,
   DialogContent,
@@ -72,7 +72,7 @@ const CreateNewServerModal = () => {
     setLoadingButtonState,
     isDialogOpen,
     setIsDialogOpen,
-  } = useContext(globalContext);
+  } = useContext(MainProvider);
 
   const handleInputChange = (event) => {
     setNewServer({
@@ -110,6 +110,7 @@ const CreateNewServerModal = () => {
           setLoadingButtonState(true);
           setTimeout(() => {
             setResponseMessage("");
+            setIsDialogOpen(false);
             return navigate(`/servers/${response?.data?.server?._id}`);
           }, 3000);
         } else {

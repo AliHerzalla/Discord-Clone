@@ -1,17 +1,16 @@
 import { Plus } from "lucide-react";
 import ActionToolTip from "../ui/action-tooltip";
-// import { useContext } from "react";
-// import { globalContext } from "../../../src/contextAPI/GlobalProvider";
+import { useContext } from "react";
+import { MainProvider } from "../../../src/contextAPI/MainContextProvider";
 
 const NavigationAction = () => {
-  // const loadingButtonState = useContext(globalContext);
-  // console.log(loadingButtonState);
+  const { setIsDialogOpen } = useContext(MainProvider);
   return (
     <div>
       <ActionToolTip align={"center"} side={"right"} label={"Add a server"}>
         <button
           className={"group flex items-center outline-none"}
-          // onClick={() => setIsDialogOpen((pre) => !pre)}
+          onClick={() => setIsDialogOpen((pre) => !pre)}
         >
           <div
             className={

@@ -1,14 +1,12 @@
 import { createContext, useState } from "react";
 import PropTypes from "prop-types";
+const MainProvider = createContext("");
 
-export const globalContext = createContext(false);
-
-const GlobalProvider = ({ children }) => {
+const MainContextProvider = ({ children }) => {
   const [loadingButtonState, setLoadingButtonState] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   return (
-    <globalContext.Provider
+    <MainProvider.Provider
       value={{
         loadingButtonState,
         setLoadingButtonState,
@@ -17,12 +15,12 @@ const GlobalProvider = ({ children }) => {
       }}
     >
       {children}
-    </globalContext.Provider>
+    </MainProvider.Provider>
   );
 };
 
-GlobalProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+MainContextProvider.propTypes = {
+  children: PropTypes.any,
 };
 
-export default GlobalProvider;
+export { MainContextProvider, MainProvider };
