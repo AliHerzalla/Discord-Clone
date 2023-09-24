@@ -2,6 +2,7 @@ import { useUser } from "@clerk/clerk-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InitialModal from "../initial-modal/InitialModal";
+import { TailSpin } from "react-loader-spinner";
 
 const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
   import.meta.env.VITE_MAIN_BACKEND_PORT
@@ -13,6 +14,7 @@ const ProfilePage = () => {
 
   const navigate = useNavigate();
 
+  // Function to create a new unique profile
   const createNewUniqueProfile = async (user) => {
     try {
       const profileDate = {
@@ -42,6 +44,7 @@ const ProfilePage = () => {
     }
   };
 
+  // Function to find the profile
   const findProfile = useCallback(
     async (userProfile) => {
       if (!userProfile) return;
@@ -53,7 +56,8 @@ const ProfilePage = () => {
         if (!response.ok)
           throw new Error("Couldn't find the server with the specified id.");
         const servers = await response.json();
-        if (!servers?.profileData) {
+        console.log("servers => ", servers);
+        if (servers?.profileData?.servers.length < 0) {
           return <InitialModal />;
         } else {
           navigate(`/servers/${servers?.profileData?.servers[0]?._id}`);
@@ -65,6 +69,7 @@ const ProfilePage = () => {
     },
     [navigate]
   );
+  // Function to find the unique profile
 
   const findUniqueProfile = useCallback(
     async (profileId) => {
@@ -89,6 +94,8 @@ const ProfilePage = () => {
 
   // To find the profile user in the database if there is an existing profile we well return the user, if there is no existing profile for this user we well create a new profile
 
+  // Use useEffect to trigger the profile fetching logic
+
   useEffect(() => {
     if (user?.id) {
       findUniqueProfile(user?.id);
@@ -99,11 +106,34 @@ const ProfilePage = () => {
     findProfile(userProfile);
   }, [userProfile, findProfile]);
 
+  // Use conditional rendering to handle the case when isLoaded is true and there's no user
+
   if (isLoaded) {
     if (!user) {
       return navigate("/sign-in");
     }
   }
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <TailSpin
+        height="32"
+        width="32"
+        color="white"
+        ariaLabel="tail-spin-loading"
+        radius="1"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+      />
+    </div>
+  );
 };
 
 export default ProfilePage;

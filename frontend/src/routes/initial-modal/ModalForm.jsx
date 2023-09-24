@@ -6,6 +6,11 @@ import { BASE_BACKEND_URL } from "./InitialModal";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { MainProvider } from "../../contextAPI/MainContextProvider";
+
+ModalForm.propTypes = {
+  userId: PropTypes.any,
+  children: PropTypes.any,
+};
 /* -------------------------------------------------------------------------- */
 /*                              DropZone styling                              */
 /* -------------------------------------------------------------------------- */
@@ -85,10 +90,10 @@ export function ModalForm({ userId, children }) {
               },
             }
           );
+          setLoadingButtonState(true);
           if (response.status !== 200)
             throw new Error("Couldn't create server");
           setResponseMessage(response.data.message);
-          setLoadingButtonState(true);
           setTimeout(() => {
             setResponseMessage("");
             return navigate(`/servers/${response?.data?.server?._id}`);
@@ -104,6 +109,8 @@ export function ModalForm({ userId, children }) {
       error.response && setErrorMsg(error.response.data);
       // error.response &&
       //   setErrorMsg("only upload files with jpg, jpeg, png format.");
+    } finally {
+      setLoadingButtonState(false);
     }
   };
 
@@ -224,8 +231,3 @@ export function ModalForm({ userId, children }) {
     </Form>
   );
 }
-
-ModalForm.propTypes = {
-  userId: PropTypes.any,
-  children: PropTypes.any,
-};

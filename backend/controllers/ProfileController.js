@@ -12,6 +12,7 @@ export const getUniqueProfile = async (req, res) => {
     const profileDoc = await UserProfileModel.findOne({
       userId: id,
     });
+    console.log(profileDoc)
     if (!profileDoc)
       throw new Error(`An Error occurred while getting the profile`);
     res.status(200).json({

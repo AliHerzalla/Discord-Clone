@@ -108,7 +108,9 @@ const CreateNewServerModal = () => {
             throw new Error("Couldn't create server");
           setResponseMessage(response.data.message);
           setLoadingButtonState(true);
+          console.log(response);
           setTimeout(() => {
+            console.log(response);
             setResponseMessage("");
             setIsDialogOpen(false);
             return navigate(`/servers/${response?.data?.server?._id}`);
@@ -124,6 +126,8 @@ const CreateNewServerModal = () => {
       error.response && setErrorMsg(error.response.data);
       // error.response &&
       //   setErrorMsg("only upload files with jpg, jpeg, png format.");
+    } finally {
+      setLoadingButtonState(false);
     }
   };
 

@@ -74,7 +74,7 @@ export const createServer = async (req, res) => {
 };
 
 /**
- * Get 
+cd  * Get 
  * Find server by user id
  * ||
  * \/

@@ -8,8 +8,9 @@ import { Separator } from "../../../components/ui/separator";
 import { ScrollArea } from "../../../components/ui/scroll-area";
 import NavigationItem from "./NavigationItem";
 import { ModeToggle } from "../mode-toggle";
+import PropTypes from "prop-types";
 
-const NavigationSideBar = () => {
+const NavigationSideBar = ({ onServerCreation }) => {
   const { isSignedIn, user } = useUser();
   const [userServers, setUserServers] = useState([]);
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const NavigationSideBar = () => {
 
   useEffect(() => {
     findServerByUserId();
-  }, [findServerByUserId]);
+  }, [findServerByUserId, onServerCreation]);
 
   useEffect(() => {
     if (!isSignedIn) {
@@ -55,7 +56,7 @@ const NavigationSideBar = () => {
               <div key={server._id} className={"mb-4"}>
                 <NavigationItem
                   id={server._id}
-                  imageUrl={server.imageUrl}
+                  imageUrl={`${BASE_BACKEND_URL}/${server.imageUrl}`}
                   name={server.name}
                 />
               </div>
@@ -83,3 +84,6 @@ const NavigationSideBar = () => {
 };
 
 export default NavigationSideBar;
+NavigationSideBar.propTypes = {
+  onServerCreation: PropTypes.func,
+};
