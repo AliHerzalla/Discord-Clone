@@ -83,6 +83,7 @@ const CreateNewServerModal = () => {
 
   const handleOnSubmit = async (event) => {
     event.preventDefault();
+    setLoadingButtonState(true);
 
     try {
       const { serverName, userId } = newServer;
@@ -107,12 +108,10 @@ const CreateNewServerModal = () => {
           if (response.status !== 200)
             throw new Error("Couldn't create server");
           setResponseMessage(response.data.message);
-          setLoadingButtonState(true);
-          console.log(response);
           setTimeout(() => {
-            console.log(response);
             setResponseMessage("");
             setIsDialogOpen(false);
+            setLoadingButtonState(false);
             return navigate(`/servers/${response?.data?.server?._id}`);
           }, 3000);
         } else {
@@ -126,8 +125,6 @@ const CreateNewServerModal = () => {
       error.response && setErrorMsg(error.response.data);
       // error.response &&
       //   setErrorMsg("only upload files with jpg, jpeg, png format.");
-    } finally {
-      setLoadingButtonState(false);
     }
   };
 

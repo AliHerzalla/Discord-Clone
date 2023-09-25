@@ -12,6 +12,7 @@ import SignUpPage from "./routes/auth/SignUp/SignUp";
 import InitialModal from "./routes/initial-modal/InitialModal";
 import ProfilePage from "./routes/profilePage/ProfilePage";
 import ServerIdPage from "./routes/server routes/ServerIdPage";
+import InvitePage from "./routes/InvitePage/InvitePage";
 
 if (!import.meta.env.VITE_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
@@ -29,10 +30,8 @@ function ClerkProviderWithRoutes() {
         <Route path="/sign-in/*" element={<SignInPage />} />
         <Route path="/sign-up/*" element={<SignUpPage />} />
         <Route path={"/servers/:serverId"} element={<ServerIdPage />} />
-
-        {/* /test */}
         <Route
-          path="/test"
+          path="/initial-page"
           element={
             <>
               <SignedIn>
@@ -44,6 +43,7 @@ function ClerkProviderWithRoutes() {
             </>
           }
         />
+        <Route path={"/invite/:inviteCode"} element={<InvitePage />} />
         {/* <Route
           path="/user-profile"
           element={

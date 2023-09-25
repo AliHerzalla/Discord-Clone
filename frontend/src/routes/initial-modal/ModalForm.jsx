@@ -47,9 +47,7 @@ const rejectStyle = {
 export function ModalForm({ userId, children }) {
   const [file, setFile] = useState(null); // state for storing actual image
   const [previewSrc, setPreviewSrc] = useState(""); // state for storing previewImage
-  const { loadingButtonState, setLoadingButtonState } =
-    useContext(MainProvider);
-  console.log("setLoadingButtonState", loadingButtonState);
+  const { setLoadingButtonState } = useContext(MainProvider);
   const [newServer, setNewServer] = useState({
     serverName: "",
     userId: userId,
@@ -69,6 +67,7 @@ export function ModalForm({ userId, children }) {
 
   const handleOnSubmit = async (event) => {
     event.preventDefault();
+    setLoadingButtonState(true);
 
     try {
       const { serverName, userId } = newServer;
@@ -90,12 +89,12 @@ export function ModalForm({ userId, children }) {
               },
             }
           );
-          setLoadingButtonState(true);
           if (response.status !== 200)
             throw new Error("Couldn't create server");
           setResponseMessage(response.data.message);
           setTimeout(() => {
             setResponseMessage("");
+            setLoadingButtonState(false);
             return navigate(`/servers/${response?.data?.server?._id}`);
           }, 3000);
         } else {
@@ -109,8 +108,6 @@ export function ModalForm({ userId, children }) {
       error.response && setErrorMsg(error.response.data);
       // error.response &&
       //   setErrorMsg("only upload files with jpg, jpeg, png format.");
-    } finally {
-      setLoadingButtonState(false);
     }
   };
 

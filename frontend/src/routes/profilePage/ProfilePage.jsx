@@ -1,7 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InitialModal from "../initial-modal/InitialModal";
 import { TailSpin } from "react-loader-spinner";
 
 const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
@@ -56,13 +55,13 @@ const ProfilePage = () => {
         if (!response.ok)
           throw new Error("Couldn't find the server with the specified id.");
         const servers = await response.json();
-        console.log("servers => ", servers);
-        if (servers?.profileData?.servers.length < 0) {
-          return <InitialModal />;
-        } else {
-          navigate(`/servers/${servers?.profileData?.servers[0]?._id}`);
+        if (servers?.profileData) {
+          if (servers?.profileData?.servers.length == 0) {
+            return navigate("/initial-page");
+          } else {
+            navigate(`/servers/${servers?.profileData?.servers[0]?._id}`);
+          }
         }
-        // setUserServers(servers?.profileData?.servers);
       } catch (error) {
         console.error("Error fetching profile servers:", error);
       }
@@ -102,38 +101,41 @@ const ProfilePage = () => {
     }
   }, [user?.id, findUniqueProfile, user]);
 
-  useEffect(() => {
-    findProfile(userProfile);
-  }, [userProfile, findProfile]);
+  // useEffect(() => {
+  //   findProfile(userProfile);
+  // }, [userProfile, findProfile]);
 
   // Use conditional rendering to handle the case when isLoaded is true and there's no user
 
   if (isLoaded) {
     if (!user) {
       return navigate("/sign-in");
+    } else {
+      findProfile(userProfile);
     }
+  } else {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <TailSpin
+          height="32"
+          width="32"
+          color="white"
+          ariaLabel="tail-spin-loading"
+          radius="1"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      </div>
+    );
   }
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <TailSpin
-        height="32"
-        width="32"
-        color="white"
-        ariaLabel="tail-spin-loading"
-        radius="1"
-        wrapperStyle={{}}
-        wrapperClass=""
-        visible={true}
-      />
-    </div>
-  );
 };
 
 export default ProfilePage;

@@ -9,6 +9,7 @@ import { ScrollArea } from "../../../components/ui/scroll-area";
 import NavigationItem from "./NavigationItem";
 import { ModeToggle } from "../mode-toggle";
 import PropTypes from "prop-types";
+import { TailSpin } from "react-loader-spinner";
 
 const NavigationSideBar = ({ onServerCreation }) => {
   const { isSignedIn, user } = useUser();
@@ -50,7 +51,7 @@ const NavigationSideBar = ({ onServerCreation }) => {
         }
       />
       <ScrollArea className={"flex-1 w-full"}>
-        {userServers?.length > 0 &&
+        {userServers?.length > 0 ? (
           userServers?.map((server) => {
             return (
               <div key={server._id} className={"mb-4"}>
@@ -61,7 +62,25 @@ const NavigationSideBar = ({ onServerCreation }) => {
                 />
               </div>
             );
-          })}
+          })
+        ) : (
+          <div
+            className={
+              "absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
+            }
+          >
+            <TailSpin
+              height="32"
+              width="32"
+              color="white"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+          </div>
+        )}
       </ScrollArea>
       <Separator
         className={
