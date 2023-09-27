@@ -25,6 +25,6 @@ const MembersSchema = new Schema({
     },
 });
 
-const MembersModel = model("Members", MembersSchema);
+const MembersModel = model("Member", MembersSchema);
 
 export default MembersModel;

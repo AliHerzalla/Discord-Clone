@@ -2,6 +2,7 @@ import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_BACKEND_URL } from "../../../src/routes/initial-modal/InitialModal";
+import { useEffect } from "react";
 
 const InvitePage = () => {
   const { inviteCode } = useParams();
@@ -9,26 +10,27 @@ const InvitePage = () => {
   const { isSignedIn, user } = useUser();
 
   if (!isSignedIn) {
-    return navigate("/sign-in");
+    navigate("/sign-in");
   }
 
-  if (!inviteCode) {
-    return navigate("/");
-  }
+  // if (!inviteCode) {
+  //   navigate("/");
+  // }
+  useEffect(() => {
+    const findUserInThatServer = async () => {
+      const response = await axios.post(
+        `${BASE_BACKEND_URL}/invite/${inviteCode}`,
+        {
+          data: { userId: user?.id },
+        }
+      );
+      console.log("invite Link ", response);
 
-  const findUserInThatServer = async () => {
-    const response = await axios.post(
-      `${BASE_BACKEND_URL}/find-user-in-that-server/${inviteCode}`,
-      {
-        data: { userId: user?.id },
-      }
-    );
-    console.log(response?.data);
-  };
+    };
+    findUserInThatServer();
+  }, [inviteCode, user?.id]);
 
-  findUserInThatServer();
-
-  return null;
+  return <div>...Loading</div>;
 };
 
 export default InvitePage;

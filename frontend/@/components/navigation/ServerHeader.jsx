@@ -18,7 +18,7 @@ import {
 import { MainProvider } from "../../../src/contextAPI/MainContextProvider";
 import { useContext } from "react";
 
-const ServerHeader = ({
+const  ServerHeader = ({
   role,
   serverName,
   serverInviteCode,

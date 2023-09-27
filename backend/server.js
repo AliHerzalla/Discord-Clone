@@ -9,6 +9,7 @@ import connectDB from "./config/database.js";
 /* -------------------------------------------------------------------------- */
 import profileRoutes from "./routes/ProfileRoutes.js";
 import serverRoutes from "./routes/ServerRoutes.js";
+import memberRoutes from "./routes/MemberRoutes.js";
 
 /* -------------------------------------------------------------------*/
 
@@ -31,6 +32,7 @@ connectDB();
 
 app.use("/", profileRoutes);
 app.use("/", serverRoutes);
+app.use("/", memberRoutes);
 
 // server connection
 app.listen(PORT, () => {

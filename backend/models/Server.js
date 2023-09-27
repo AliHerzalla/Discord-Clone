@@ -25,7 +25,7 @@ const ServerSchema = new Schema({
     },
     members: {
         type: [Schema.Types.ObjectId],
-        ref: "Members",
+        ref: "Member",
     },
     channels: {
         type: [Schema.Types.ObjectId],

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import NavigationSideBar from "../../../@/components/navigation/navigation-sidebar";
 import CreateNewServerModal from "../../../src/routes/initial-modal/CreateNewServerModal";
 import { MainProvider } from "../../../src/contextAPI/MainContextProvider";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ChannelsNavigationSideBar from "../../../@/components/navigation/ChannelsNavigationSideBar";
 import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
@@ -15,9 +15,11 @@ const MainLayout = ({ children }) => {
   const { isSignedIn } = useUser();
   const navigate = useNavigate();
 
-  if (!isSignedIn) {
-    return navigate("/sign-in");
-  }
+  useEffect(() => {
+    if (!isSignedIn) {
+      return navigate("/sign-in");
+    }
+  }, [navigate, isSignedIn]);
 
   // Callback function to update server count
   const handleServerCreation = () => {

@@ -8,7 +8,8 @@ import {
   findServerByUserId,
   findServerByServerId,
   findServerInfoByServerId,
-  findUserInThatServer
+  findUserInThatServer,
+  updateInviteCode
 } from "../controllers/ServerController.js";
 
 
@@ -36,10 +37,14 @@ const upload = multer({
   fileFilter,
   // preservePath:true,
 });
-
+/find-user-in-that-server/
 router.route("/create-server").post(upload.single("Image"), createServer);
 router.route("/find-server-by-userId/:id").get(findServerByUserId);
-router.route("/find-unique-server-by-server-id/:id").post(findServerByServerId);
+router.route("/find-unique-server-by-server-id/:id").post(findServerByServerId).patch(updateInviteCode);
 router.route("/find-server-info/:id").get(findServerInfoByServerId);
-router.route("/find-user-in-that-server/:inviteCode").post(findUserInThatServer);
+router.route("/invite/:inviteCode").post(findUserInThatServer);
+// router.route("/invite/:inviteCode").get(findUserInThatServer);
+
+
+
 export default router;

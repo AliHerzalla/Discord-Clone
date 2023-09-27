@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useCallback } from "react";
 
 import { MainProvider } from "../../contextAPI/MainContextProvider";
 import {
@@ -11,15 +11,28 @@ import {
 import { Button } from "../../../@/components/ui/button";
 import { Label } from "../../../@/components/ui/label";
 import { Input } from "../../../@/components/ui/input";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, RefreshCw } from "lucide-react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+const BASE_BACKEND_URL = `${import.meta.env.VITE_MAIN_BACKEND_URL}${
+  import.meta.env.VITE_MAIN_BACKEND_PORT
+}`;
 
 const InviteModal = () => {
   const [copied, setCopied] = useState(false);
+  const { serverId } = useParams();
 
-  const { isDialogOpenInvite, setIsDialogOpenInvite, inviteCodeContext } =
-    useContext(MainProvider);
+  const {
+    isDialogOpenInvite,
+    setIsDialogOpenInvite,
+    inviteCodeContext,
+    setInviteCodeContext,
+  } = useContext(MainProvider);
 
-  const inviteUrl = `${window?.location?.origin}/invite/${inviteCodeContext}`;
+  const inviteUrl =
+    typeof window !== "undefined" && window.location.origin
+      ? `${window?.location?.origin}/invite/${inviteCodeContext}`
+      : "";
 
   const onCopy = () => {
     navigator.clipboard.writeText(inviteUrl);
@@ -27,6 +40,18 @@ const InviteModal = () => {
     setTimeout(() => {
       setCopied(false);
     }, 1000);
+  };
+
+  const handleUpdateInviteCode = async () => {
+    try {
+      const response = await axios.patch(
+        `${BASE_BACKEND_URL}/find-unique-server-by-server-id/${serverId}`
+      );
+      // console.log(response);
+      setInviteCodeContext(response.data.data.inviteCode)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   //   const onNew = () => {};
@@ -54,22 +79,22 @@ const InviteModal = () => {
             />
             <Button onClick={onCopy} size="icon">
               {copied ? (
-                <Check className="w-4 h-4" />
+                <Check className="w-3.5 h-3.5" />
               ) : (
-                <Copy className="w-4 h-4" />
+                <Copy className="w-3.5 h-3.5" />
               )}
             </Button>
           </div>
-          {/* <Button
-            onClick={onNew}
-            disabled={loadingButtonState}
+          <Button
+            onClick={handleUpdateInviteCode}
+            // disabled={loadingButtonState}
             variant="link"
             size="sm"
             className="text-xs text-zinc-500 mt-4"
           >
             Generate a new link
             <RefreshCw className="w-4 h-4 ml-2" />
-          </Button> */}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

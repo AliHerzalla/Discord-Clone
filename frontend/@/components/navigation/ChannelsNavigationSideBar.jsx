@@ -53,6 +53,7 @@ const ChannelsNavigationSideBar = () => {
         if (response.data.data == null) {
           navigate("/");
         } else {
+          // console.log(response)
           setMembers(response?.data?.data?.members);
           setChannels(response?.data?.data?.channels);
           setServerName(response?.data?.data?.name);

@@ -101,6 +101,12 @@ const ProfilePage = () => {
     }
   }, [user?.id, findUniqueProfile, user]);
 
+  useEffect(() => {
+    if (isLoaded && user) {
+      findProfile(userProfile);
+    }
+  }, [isLoaded, user, userProfile]);
+
   // useEffect(() => {
   //   findProfile(userProfile);
   // }, [userProfile, findProfile]);
