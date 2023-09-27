@@ -21,7 +21,6 @@ const NavigationSideBar = ({ onServerCreation }) => {
     const response = await axios.get(
       `${BASE_BACKEND_URL}/find-server-by-userId/${user?.id}`
     );
-    console.log(response);
     if (response.status != 200) {
       throw new Error("Couldn't find the servers");
     } else {

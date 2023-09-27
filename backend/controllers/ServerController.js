@@ -136,33 +136,35 @@ export const findServerByServerId = async (req, res) => {
   const { userId } = req.body.data;
 
   try {
-    console.log(`Finding server by ID: ${id}`);
+    if (id && userId) {
+      console.log(`Finding server by ID: ${id}`);
 
-    const serverDoc = await ServerModel.findById(id).populate("members");
-    console.log(`Server Doc:`, serverDoc);
+      const serverDoc = await ServerModel.findById(id).populate("members");
+      console.log(`Server Doc:`, serverDoc);
 
-    console.log(`Finding user by ID: ${userId}`);
-    const userDoc = await UserProfileModel.findOne({ userId });
-    console.log(`User Doc:`, userDoc);
+      console.log(`Finding user by ID: ${userId}`);
+      const userDoc = await UserProfileModel.findOne({ userId });
+      console.log(`User Doc:`, userDoc);
 
-    if (!serverDoc) {
-      return res.status(404).json({ message: "Server not found", data: null });
-    }
+      if (!serverDoc) {
+        return res.status(404).json({ message: "Server not found", data: null });
+      }
 
-    if (!userDoc) {
-      return res.status(404).json({ message: "User not found", data: null });
-    }
+      if (!userDoc) {
+        return res.status(404).json({ message: "User not found", data: null });
+      }
 
-    const isMember =
-      serverDoc.members &&
-      serverDoc.members.some(
-        (member) => member.profile && member.profile.equals(userDoc._id)
-      );
+      const isMember =
+        serverDoc.members &&
+        serverDoc.members.some(
+          (member) => member.profile && member.profile.equals(userDoc._id)
+        );
 
-    if (isMember) {
-      return res.status(200).json({ message: "Member found", data: true });
-    } else {
-      return res.status(200).json({ message: "Member not found", data: false });
+      if (isMember) {
+        return res.status(200).json({ message: "Member found", data: true });
+      } else {
+        return res.status(200).json({ message: "Member not found", data: false });
+      }
     }
   } catch (error) {
     console.error("Error occurred in findServerByServerId:", error);
@@ -241,58 +243,60 @@ export const findUserInThatServer = async (req, res) => {
     console.log(
       `findUserInThatServer ${inviteCode} for ${userId} is triggered`
     );
-    // 1. Fetch the current user's profile.
-    const userProfile = await UserProfileModel.findOne({ userId });
-    console.log(`UserProfileModel.findOne({ userId }`, userProfile);
+    if (userId) {
+      // 1. Fetch the current user's profile.
+      const userProfile = await UserProfileModel.findOne({ userId });
+      console.log(`UserProfileModel.findOne({ userId }`, userProfile);
 
-    if (!userProfile) {
-      return res.status(404).json({ message: "User profile not found" });
-    }
+      if (!userProfile) {
+        return res.status(404).json({ message: "User profile not found" });
+      }
 
-    // 2. Check if an invite code exists in the request.
-    if (!inviteCode) {
-      return res.status(400).json({ message: "Invite code not provided" });
-    }
+      // 2. Check if an invite code exists in the request.
+      if (!inviteCode) {
+        return res.status(400).json({ message: "Invite code not provided" });
+      }
 
-    // 3. Query the server using the invite code.
-    const server = await ServerModel.findOne({ inviteCode }).populate(
-      "members"
-    );
+      // 3. Query the server using the invite code.
+      const server = await ServerModel.findOne({ inviteCode }).populate(
+        "members"
+      );
 
-    if (!server) {
-      return res.status(404).json({ message: "Server not found" });
-    }
+      if (!server) {
+        return res.status(404).json({ message: "Server not found" });
+      }
 
-    // 4. Check if the user is already a member.
-    const isMember = server.members.some((member) =>
-      member.profileId.equals(userProfile._id)
-    );
+      // 4. Check if the user is already a member.
+      const isMember = server.members.some((member) =>
+        member.profileId.equals(userProfile._id)
+      );
 
-    if (isMember) {
+      if (isMember) {
+        return res
+          .status(200)
+          .json({ message: "User is already a member", serverId: server._id, navigate: true });
+      }
+
+      // 5. If the user is not a member, add them as a new member.
+      const newMember = new MembersModel({
+        profile: userProfile._id,
+        server: server._id,
+      });
+
+      await newMember.save();
+
+      // Update the server's members array with the new member.
+      server.members.push(newMember);
+      await server.save();
+
+      // Update the profile's servers with the new member in that server
+      userProfile.servers.push(server);
+      await userProfile.save();
+
       return res
         .status(200)
-        .json({ message: "User is already a member", serverId: server._id });
+        .json({ message: "User added as a member", serverId: server._id, navigate: true });
     }
-
-    // 5. If the user is not a member, add them as a new member.
-    const newMember = new MembersModel({
-      profile: userProfile._id,
-      server: server._id,
-    });
-
-    await newMember.save();
-
-    // Update the server's members array with the new member.
-    server.members.push(newMember);
-    await server.save();
-
-    // Update the profile's servers with the new member in that server
-    userProfile.servers.push(server);
-    await userProfile.save();
-
-    return res
-      .status(200)
-      .json({ message: "User added as a member", serverId: server._id });
   } catch (error) {
     console.error("Error occurred in joinServer:", error);
     res.status(500).json({ message: "Internal Error", error: error.message });

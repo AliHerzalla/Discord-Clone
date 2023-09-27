@@ -32,15 +32,11 @@ const ChannelsNavigationSideBar = () => {
       );
       if (response.status != 200) {
         throw new Error("Something went wrong!");
-      } else {
-        if (response.data.data != true) {
-          navigate("/");
-        }
       }
     } catch (error) {
       console.log(error);
     }
-  }, [serverId, user?.id, navigate]);
+  }, [serverId, user?.id]);
 
   const findServerInfoByServerId = useCallback(async () => {
     try {
